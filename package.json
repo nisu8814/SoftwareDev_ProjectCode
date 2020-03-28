@@ -1,0 +1,23 @@
+{
+  "name": "softwaredev_projectcode",
+  "version": "1.0.0",
+  "description": "project for sofwaredev on weather data",
+  "main": "views/pages/frontpage.ejs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k2zylstra/SoftwareDev_ProjectCode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/k2zylstra/SoftwareDev_ProjectCode/issues"
+  },
+  "homepage": "https://github.com/k2zylstra/SoftwareDev_ProjectCode#readme",
+  "dependencies": {
+    "http": "0.0.1-security",
+    "pg": "^7.18.2"
+  }
+}
