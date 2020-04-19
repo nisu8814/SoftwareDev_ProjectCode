@@ -9,17 +9,17 @@
 CREATE TABLE Daily_Weather (
 	day_id SERIAL NOT NULL PRIMARY KEY
 	,day DATE NOT NULL
-	,temp_f_high integer NOT NULL
-	,temp_c_high integer NOT NULL
+	,temp_f_high float NOT NULL
+	,temp_c_high float NOT NULL
 	,temp_f_low float NOT NULL
 	,temp_c_low float NOT NULL
 	,humidity float NULL
 	,precipitation varchar(20) NOT NULL
 	,coverage varchar(20) NULL
 	,alerts varchar(50) NULL
-	,feels_like integer NULL
+	,feels_like float NULL
 	,pressure float NULL
-	,wind integer NULL
+	,wind float NULL
 	,description varchar(300) NULL
 	,precip_chance integer NULL
 );
@@ -27,15 +27,15 @@ CREATE TABLE Daily_Weather (
 CREATE TABLE Hour_Weather (
 	hour_id SERIAL NOT NULL PRIMARY KEY
 	,day_id integer NOT NULL
-	,hour integer  NOT NULL
+	,hour float NOT NULL
 	,temp_f float NOT NULL
 	,temp_c float NOT NULL
 	,humidity float NULL
 	,precip varchar(20) NOT NULL
 	,coverage varchar(20) NULL
-	,feels_like integer NULL
+	,feels_like float NULL
 	,pressure float NULL
-	,wind integer NULL
+	,wind float NULL
 	,description varchar(300) NULL
 	,precip_chance integer NOT NULL
 	,constraint fk_date
