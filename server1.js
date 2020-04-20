@@ -120,6 +120,12 @@ app.get('/statistics', function(req, res) {
 		my_title:"Statistics"
 	});
 });
+app.get('/', function(req, res) {
+	res.render('pages/frontpage', {
+		local_css:"frontpage.css",
+		my_title:"Front Page"
+	});
+})
 // app.get('/home', function(req, res) {
 // 	var query = 'select * from favorite_colors;';
 // 	db.any(query)
