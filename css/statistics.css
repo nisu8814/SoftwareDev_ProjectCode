@@ -1,0 +1,24 @@
+.pad {
+	margin-top: 50px;
+}
+
+.display-block {
+	margin-top: 50px;
+	text-align:center;
+	border:2px solid #FFD700;
+	width: 70rem;
+	height:45rem;
+	background:#FFFFFF;
+	border-radius:25px;
+}
+
+.other-city-block {
+	width: 15rem;
+	height: 45rem;
+}
+
+.table-display {
+	width:80%;
+	text-align: center;
+	left:80px;
+}
