@@ -25,9 +25,9 @@ var pgp = require('pg-promise')();
 const dbConfig = {
 	host: 'localhost',
 	port: 5432,
-	database: 'fpostgres',
+	database: 'postgres',
 	user: 'postgres',
-	password: 'help'
+	password: 'help' //modidfy this line  to the password you set on the database.
 };
 
 var db = pgp(dbConfig);
@@ -37,58 +37,68 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/'));//This line is necessary for us to use relative paths and access our resources directory
 
 
+var pg = require('pg');
+var apiKey = "6adef049dd8abe2d9aac6577b7a20f93";
+var conStr = "postgres://postgres:help@localhost:5432/postgres";//modify this line to the password you set in the database
 
-/*********************************
- Below we'll add the get & post requests which will handle:
-   - Database access
-   - Parse parameters from get (URL) and post (data package)
-   - Render Views - This will decide where the user will go after the get/post request has been processed
+var client = new pg.Client(conStr);
+client.connect();
 
- Web Page Requests:
+var ret = client.query("select * from daily_weather");
 
-  Login Page:        Provided For your (can ignore this page)
-  Registration Page: Provided For your (can ignore this page)
-  Home Page:
-  		/home - get request (no parameters) 
-  				This route will make a single query to the favorite_colors table to retrieve all of the rows of colors
-  				This data will be passed to the home view (pages/home)
+var http = require("http");
+url = "http://api.openweathermap.org/data/2.5/weather?q=boulder,colorado&units=imperial&appid=" + apiKey;
 
-  		/home/pick_color - post request (color_message)
-  				This route will be used for reading in a post request from the user which provides the color message for the default color.
-  				We'll be "hard-coding" this to only work with the Default Color Button, which will pass in a color of #FFFFFF (white).
-  				The parameter, color_message, will tell us what message to display for our default color selection.
-  				This route will then render the home page's view (pages/home)
+var request = http.get(url, function (response) {
+	
+	var buffer = "",
+		data;
+	response.on("data", function (chunk) {
+		buffer += chunk;
+	});
 
-  		/home/pick_color - get request (color)
-  				This route will read in a get request which provides the color (in hex) that the user has selected from the home page.
-  				Next, it will need to handle multiple postgres queries which will:
-  					1. Retrieve all of the color options from the favorite_colors table (same as /home)
-  					2. Retrieve the specific color message for the chosen color
-  				The results for these combined queries will then be passed to the home view (pages/home)
+	response.on("end", function (err) {
 
-  		/team_stats - get request (no parameters)
-  			This route will require no parameters.  It will require 3 postgres queries which will:
-  				1. Retrieve all of the football games in the Fall 2018 Season
-  				2. Count the number of winning games in the Fall 2018 Season
-  				3. Count the number of lossing games in the Fall 2018 Season
-  			The three query results will then be passed onto the team_stats view (pages/team_stats).
-  			The team_stats view will display all fo the football games for the season, show who won each game, 
-  			and show the total number of wins/losses for the season.
+		//console.log(buffer);
+		//console.log("\n");
+		data = JSON.parse(buffer);
 
-  		/player_info - get request (no parameters)
-  			This route will handle a single query to the football_players table which will retrieve the id & name for all of the football players.
-  			Next it will pass this result to the player_info view (pages/player_info), which will use the ids & names to populate the select tag for a form 
-************************************/
+		var date = new Date();
+		var temp_f_high = data.main.temp_max;
+		var temp_c_high = (temp_f_high - 32) * (9/5);
+		var temp_f_low = data.main.temp_min;
+		var temp_c_low = (temp_c_low - 32) *(9/5);
 
-// login page 
-// app.get('/', function(req, res) {
-// 	res.render('pages/login',{
-// 		local_css:"signin.css", 
-// 		my_title:"Login Page"
-// 	});
-// });
+		var humidity = data.main.humidity;
+		var precipitation = data.weather[0]["main"];
+		var wind = data.wind["speed"];
+		var feels_like = data.main.feels_like;
+		var pressure = data.main.pressure;
+		var description = data.weather["description"];
+debugger
+		//console.log(data);
+		
+		client.query("INSERT INTO daily_weather(day, temp_f_high, temp_f_low, temp_c_high, temp_c_low, humidity, precipitation, coverage, alerts, feels_like, pressure, wind, description, precip_chance) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
+			[
+				date
+				,temp_f_high
+				,temp_c_high
+				,temp_f_low
+				,temp_c_low
+				,humidity
+				,precipitation
+				,null
+				,null
+				,feels_like
+				,pressure
+				,wind
+				,description
+				,null
+			]);
+	});
+});
 
-// registration page 
+
 app.get('/frontpage', function(req, res) {
 	res.render('pages/frontpage',{
 		local_css:"frontpage.css", 
@@ -120,129 +130,6 @@ app.get('/statistics', function(req, res) {
 		my_title:"Statistics"
 	});
 });
-// app.get('/home', function(req, res) {
-// 	var query = 'select * from favorite_colors;';
-// 	db.any(query)
-//         .then(function (rows) {
-//             res.render('pages/home',{
-// 				my_title: "Home Page",
-// 				data: rows,
-// 				color: '',
-// 				color_msg: ''
-// 			})
-
-//         })
-//         .catch(function (err) {
-//             // display error message in case an error
-//             console.log('error', err);
-//             response.render('pages/home', {
-//                 title: 'Home Page',
-//                 data: '',
-//                 color: '',
-//                 color_msg: ''
-//             })
-//         })
-// });
-// app.get('/home/pick_color', function(req, res) {
-// 	var color_choice = req.query.color_selection;
-// 	var color_options =  'select * from favorite_colors;';
-// 	var color_message = "select color_msg from favorite_colors where hex_value = '" + color_choice + "';";
-// 	db.task('get-everything', task => {
-//         return task.batch([
-//             task.any(color_options),
-//             task.any(color_message)
-//         ]);
-//     })
-//     .then(info => {
-//     	res.render('pages/home',{
-// 				my_title: "Home Page",
-// 				data: info[0],
-// 				color: color_choice,
-// 				color_msg: info[1][0].color_msg
-// 			})
-//     })
-//     .catch(err => {
-//         // display error message in case an error
-//             console.log('error', err);
-//             response.render('pages/home', {
-//                 title: 'Home Page',
-//                 data: '',
-//                 color: '',
-//                 color_msg: ''
-//             })
-//     });
-
-// });
-// app.get('/team_stats', function(req,res) {
-
-// 	var query1 = 'select * from football_games;';
-// 	var query2 = 'select count(*) as win from football_games where home_score>visitor_score ;';
-// 	var query3 = 'select count(*) as loss from football_games where visitor_score>home_score;';
-// 	db.task('get-everything', task => {
-// 		return task.batch([
-// 			task.any(query1),
-// 			task.any(query2),
-// 			task.any(query3)
-// 		]);
-// 	})
-// 	.then(data => {
-// 		res.render('pages/team_stats',{
-// 				my_title: "Team Stats",
-// 				result1: data[0],
-// 				result2: data[1],
-// 				result3: data[2]
-// 			})
-// 	})
-// 	.catch(err => {
-// 		// display error message in case an error
-// 			console.log('error', err);
-// 			res.render('pages/team_stats',{
-// 				my_title: "Team Stats",
-// 				result_1: 'task 1 failed',
-// 				result_2: 'task 2 failed',
-// 				result_3: 'task 3 failed'
-// 			})
-// 	});
-
-
-
-
-
-// });
-// app.post('/home/pick_color', function(req, res) {
-// 	var color_hex = req.body.color_hex;
-// 	var color_name = req.body.color_name;
-// 	var color_message = req.body.color_message;
-// 	var insert_statement = "INSERT INTO favorite_colors(hex_value, name, color_msg) VALUES('" + color_hex + "','" +
-// 							color_name + "','" + color_message +"') ON CONFLICT DO NOTHING;";
-
-// 	var color_select = 'select * from favorite_colors;';
-// 	db.task('get-everything', task => {
-//         return task.batch([
-//             task.any(insert_statement),
-//             task.any(color_select)
-//         ]);
-//     })
-//     .then(info => {
-//     	res.render('pages/home',{
-// 				my_title: "Home Page",
-// 				data: info[1],
-// 				color: color_hex,
-// 				color_msg: color_message
-// 			})
-//     })
-//     .catch(err => {
-//         // display error message in case an error
-//             console.log('error', err);
-//             response.render('pages/home', {
-//                 title: 'Home Page',
-//                 data: '',
-//                 color: '',
-//                 color_msg: ''
-//             })
-//     });
-// });
-/*Add your other get/post request handlers below here: */
 
 
 app.listen(3000);
