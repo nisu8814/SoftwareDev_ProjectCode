@@ -1,6 +1,6 @@
 var pg = require('pg');
 var apiKey = "6adef049dd8abe2d9aac6577b7a20f93";
-var conStr = "postgres://postgres:Krl3&3R@localhost:5432/weatherdb";
+var conStr = "postgres://kieran:00Zylstra@localhost:5432/weatherdb";
 
 var client = new pg.Client(conStr);
 client.connect();
