@@ -130,8 +130,9 @@ app.get('/statistics', function(req, res) {
 		my_title:"Statistics"
 	});
 });
-<<<<<<< HEAD
-=======
+
+///<<<<<<< HEAD
+///=======
 app.get('/', function(req, res) {
 	res.render('pages/frontpage', {
 		local_css:"frontpage.css",
