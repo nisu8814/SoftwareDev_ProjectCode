@@ -38,70 +38,95 @@ app.use(express.static(__dirname + '/'));//This line is necessary for us to use 
 
 
 var pg = require('pg');
-var apiKey = "6adef049dd8abe2d9aac6577b7a20f93";
 var apiKey_hour = "xGXPt0sqTAIT7mQ1HZOsywWhRYhwfHFn";
-var conStr = "postgres://postgres:00Zylstra@localhost:5432/weatherdb";//modify this line to the password you set in the database
 
-var client = new pg.Client(conStr);
-client.connect();
 
-var ret = client.query("select * from daily_weather");
+//var ret = client.query("select * from daily_weather");
 
 var http = require("http");
-url = "http://api.openweathermap.org/data/2.5/weather?q=boulder,colorado&units=imperial&appid=" + apiKey;
 
 //url_hourly = pro.openweathermap.org/data/2.5/forecast/hourly?id={city ID}&appid={your api key} 
 url_hourly = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/16834?apikey=" + apiKey_hour;
+var apiKey = "6adef049dd8abe2d9aac6577b7a20f93";
+var conStr = "postgres://postgres:00Zylstra@localhost:5432/weatherdb";//modify this line to the password you set in the database
+url = "http://api.openweathermap.org/data/2.5/weather?q=boulder,colorado&units=imperial&appid=" + apiKey;
 
-var request = http.get(url, function (response) {
 
-	var buffer = "",
-		data;
-	response.on("data", function (chunk) {
-		buffer += chunk;
+
+function insertDailyWeather(url, conStr) {
+
+	var client = new pg.Client(conStr);
+	client.connect();
+	console.log("Hello testing");
+
+	var request = http.get(url, function (response) {
+
+		var buffer = "",
+			data;
+		response.on("data", function (chunk) {
+			buffer += chunk;
+		});
+
+		response.on("end", function (err) {
+
+			//console.log(buffer);
+			//console.log("\n");
+			data = JSON.parse(buffer);
+
+			var date = new Date();
+			var temp_f_high = data.main.temp_max;
+			var temp_c_high = (temp_f_high - 32) * (9 / 5);
+			var temp_f_low = data.main.temp_min;
+			var temp_c_low = (temp_c_low - 32) * (9 / 5);
+
+			var humidity = data.main.humidity;
+			var precipitation = data.weather[0]["main"];
+			var wind = data.wind["speed"];
+			var feels_like = data.main.feels_like;
+			var pressure = data.main.pressure;
+			var description = data.weather["description"];
+			debugger
+			//console.log(data);
+
+			client.query("INSERT INTO daily_weather(day, temp_f_high, temp_f_low, temp_c_high, temp_c_low, humidity, precipitation, coverage, alerts, feels_like, pressure, wind, description, precip_chance) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
+				[
+					date
+					, temp_f_high
+					, temp_c_high
+					, temp_f_low
+					, temp_c_low
+					, humidity
+					, precipitation
+					, null
+					, null
+					, feels_like
+					, pressure
+					, wind
+					, description
+					, null
+				]).then(() => { client.end() });
+		})
+	});
+}
+
+var query_today = "select * from daily_weather where day = cast(to_char(now(), 'YYYY-MM-DD') as date)";
+var client = new pg.Client(conStr);
+client.connect()
+client.query(query_today)
+	.then((today) => {
+		console.log("today length: ", today.rows.length);
+		if (today.rows.length === 0) {
+			insertDailyWeather(url, conStr);
+		}
+		console.log("today: ", today.day);
+	})
+	.then(() => {
+		client.end();
 	});
 
-	response.on("end", function (err) {
-
-		//console.log(buffer);
-		//console.log("\n");
-		data = JSON.parse(buffer);
-
-		var date = new Date();
-		var temp_f_high = data.main.temp_max;
-		var temp_c_high = (temp_f_high - 32) * (9 / 5);
-		var temp_f_low = data.main.temp_min;
-		var temp_c_low = (temp_c_low - 32) * (9 / 5);
-
-		var humidity = data.main.humidity;
-		var precipitation = data.weather[0]["main"];
-		var wind = data.wind["speed"];
-		var feels_like = data.main.feels_like;
-		var pressure = data.main.pressure;
-		var description = data.weather["description"];
-		debugger
-		//console.log(data);
-
-		client.query("INSERT INTO daily_weather(day, temp_f_high, temp_f_low, temp_c_high, temp_c_low, humidity, precipitation, coverage, alerts, feels_like, pressure, wind, description, precip_chance) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
-			[
-				date
-				, temp_f_high
-				, temp_c_high
-				, temp_f_low
-				, temp_c_low
-				, humidity
-				, precipitation
-				, null
-				, null
-				, feels_like
-				, pressure
-				, wind
-				, description
-				, null
-			]);
-	});
-});
-
+setInterval(function () {
+	insertDailyWeather(url, conStr);
+}, 86400000); //8640000 is 24 hours in milliseconds 1000 * 60 * 60 * 24
 
 app.get('/frontpage', function (req, res) {
 	res.render('pages/frontpage', {
@@ -133,14 +158,14 @@ app.get('/statistics', function (req, res) {
 	db.any(query)
 		.then(function (weather_data) {
 
-				console.log(weather_data);
-				res.render('pages/statistics', {
-					local_css: "statistics.css",
-					my_title: "Statistics",
-					weather: weather_data,
-					user: "test"
-				});
-			}
+			//console.log(weather_data);
+			res.render('pages/statistics', {
+				local_css: "statistics.css",
+				my_title: "Statistics",
+				weather: weather_data,
+				user: "test"
+			});
+		}
 		)
 });
 
