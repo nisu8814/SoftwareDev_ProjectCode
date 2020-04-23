@@ -49,6 +49,9 @@ var ret = client.query("select * from daily_weather");
 var http = require("http");
 url = "http://api.openweathermap.org/data/2.5/weather?q=boulder,colorado&units=imperial&appid=" + apiKey;
 
+//url_hourly = pro.openweathermap.org/data/2.5/forecast/hourly?id={city ID}&appid={your api key} 
+url_hourly = "pro.openweathermap.org/data/2.5/forecast/hourly?id=Boulder,colorado&units=imperial&appid=" + apiKey;
+
 var request = http.get(url, function (response) {
 
 	var buffer = "",
