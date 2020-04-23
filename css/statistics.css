@@ -10,6 +10,11 @@
 	height:45rem;
 	background:#FFFFFF;
 	border-radius:25px;
+	border-width: .2rem !important;
+}
+
+.card {
+	border-width: 2px;
 }
 
 .other-city-block {
