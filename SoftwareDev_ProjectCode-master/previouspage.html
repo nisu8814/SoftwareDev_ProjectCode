@@ -1,18 +1,143 @@
-/* this page will give some information about the members of our team with a small bio */
-<!doctype html>
-<html>
-  <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/previouspage.css">
+<html lang="en"><head>
 
-    <style>
-      body { background: url(" Blue.jpg");}
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Previous Weather</title>
+	<link rel="icon" href="../resources/img/favicon.ico" type="image/x-icon">
+    <!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<link href="../resources/css/my_style.css" rel="stylesheet">
+	<link href="../resources/css/weather.css" rel="stylesheet">
   </head>
-  <body background="blue.jpg">
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="home.html">
+		<img class="rounded-circle" src="../resources/img/cloudy.png" alt="" width="30" height="30">
+	  </a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarText">
+		<ul class="navbar-nav mr-auto">
+		  <li class="nav-item">
+			<a class="nav-link" href="home.html">Home</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="player_info.html">Today's Weather</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="player_info.html">Forecast</a>
+		  </li>
+		  <li class="nav-item active">
+			<a class="nav-link" href="team_stats.html">Previous Weather</a>
+		  </li>
+		  
+		</ul>
+	  </div>
+	</nav>
+	<div class="container">
+		<br>
+		<div class="jumbotron">
+		  <h1 class="display-4">Previous Weather</h1>
+		  <p class="lead">A look at last week's weather</p>
+		</div>
+
+		
+		<br><div class="row">
+  <div class="column">
+    <div class="card">
+      <h3>Sunday</h3>
+	  <h3>3/22</h3>
+	  <img src="../img/weather_icons/svg/wi-day-snow.svg" width="225" height="210">
+      <p>High: 70</p>
+	  <p>Low: 34</p>
+      
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <h3>Monday</h3>
+	  <h3>3/23</h3>
+	  <img src="../img/weather_icons/svg/wi-day-cloudy.svg" width="225" height="210">
+      <p>High: 67</p>
+	  <p>Low: 33</p>
+
+    </div>
+  </div>
+  
+  <div class="column">
+    <div class="card">
+      <h3>Tuesday</h3>
+	  <h3>3/24</h3>
+	  <img src="../img/weather_icons/svg/wi-day-sunny.svg" width="225" height="210">
+
+      <p>High: 62</p>
+	  <p>Low: 29</p>
+    </div>
+  </div>
+  
+  <div class="column">
+    <div class="card">
+      <h3>Wednesday</h3>
+	  <h3>3/25</h3>
+	  <img src="../img/weather_icons/svg/wi-day-sunny.svg" width="225" height="210">
+
+      <p>High: 70</p>
+	  <p>Low: 36</p>
+    </div>
+  </div><div class="column">
+    <div class="card">
+      <h3>Thursday</h3>
+	  <h3>3/26</h3>
+	  <img src="../img/weather_icons/svg/wi-day-rain.svg" width="225" height="210">
+
+      <p>High: 75</p>
+	  <p>Low: 39</p>
+    </div>
+  </div>
+<div class="column">
+    <div class="card">
+      <h3>Friday</h3>
+	  <h3>3/27</h3>
+      <img src="../img/weather_icons/svg/wi-day-cloudy.svg" width="225" height="210">
+
+	  <p>High: 75</p>
+	  <p>Low: 36</p>
+    </div>
+  </div>
+<div class="column">
+    <div class="card">
+      <h3>Saturday</h3>
+	  <h3>3/28</h3>
+      <img src="../img/weather_icons/svg/wi-day-sunny.svg" width="225" height="210">
+
+	  <p>High: 70</p>
+	  <p>Low: 34</p>
+    </div>
+  </div>
+<div class="column">
+    <div class="card">
+      <h3>Sunday</h3>
+	  <h3>3/29</h3>
+      <img src="../img/weather_icons/svg/wi-day-sunny.svg" width="225" height="210">
+
+	  <p>High: 71</p>
+	  <p>Low: 32</p>
+    </div>
+  </div>
+
+</div>
+
+
+		
+
+	</div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    
-</body>
-</html> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+	<script src="../resources/js/my_scripts.js"></script>
+
+
+</body></html>
