@@ -39,6 +39,7 @@ app.use(express.static(__dirname + '/'));//This line is necessary for us to use 
 
 var pg = require('pg');
 var apiKey = "6adef049dd8abe2d9aac6577b7a20f93";
+var apiKey_hour = "xGXPt0sqTAIT7mQ1HZOsywWhRYhwfHFn";
 var conStr = "postgres://postgres:00Zylstra@localhost:5432/weatherdb";//modify this line to the password you set in the database
 
 var client = new pg.Client(conStr);
@@ -50,7 +51,7 @@ var http = require("http");
 url = "http://api.openweathermap.org/data/2.5/weather?q=boulder,colorado&units=imperial&appid=" + apiKey;
 
 //url_hourly = pro.openweathermap.org/data/2.5/forecast/hourly?id={city ID}&appid={your api key} 
-url_hourly = "pro.openweathermap.org/data/2.5/forecast/hourly?id=Boulder,colorado&units=imperial&appid=" + apiKey;
+url_hourly = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/16834?apikey=" + apiKey_hour;
 
 var request = http.get(url, function (response) {
 
